@@ -58,16 +58,18 @@ const TrendingArticles = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-gray-50">
-      <div className="mb-4 mt-4">
-        <Logo />
-      </div>
+    <div className="bg-gray-50">
+      <div className="container mx-auto p-4 bg-gray-50">
+        <div className="mb-4 mt-4">
+          <Logo />
+        </div>
 
-      <h1 className="text-3xl font-semibold mb-4 ">Trending Articles</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {articles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
-        ))}
+        <h1 className="text-3xl font-semibold mb-4 ">Trending Articles</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+          {articles.map((article) => (
+            <ArticleCard key={article.id} article={article} />
+          ))}
+        </div>
       </div>
     </div>
   );
