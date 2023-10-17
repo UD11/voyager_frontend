@@ -8,8 +8,19 @@ import {
   DELETE_PDF,
 } from "../graphql";
 import { BlankPostComponent } from "./Icons";
+import {toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Card = ({ title, description, author, institution, link, id }) => {
+const Card = ({
+  title,
+  description,
+  author,
+  institution,
+  link,
+  id,
+  createdAt,
+  topic,
+}) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [deletePdf] = useMutation(DELETE_PDF);
   const navigate = useNavigate();
@@ -26,34 +37,61 @@ const Card = ({ title, description, author, institution, link, id }) => {
   const handleDelete = () => {
     deletePdf({
       variables: { id: parseInt(id) },
-    });
-    setDropdownVisible(false);
+    })
+      .then(() => {
+        setDropdownVisible(false);
+        const notify = () => toast('Article deleted successfully');
+        notify(); 
+      })
+      .catch((error) => {
+        console.error('Error deleting PDF:', error);
+      });
   };
+  
 
   const navigateToPdf = () => {
     navigate(`/article/${id}`);
   };
 
   return (
-    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-4 pt-8">
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4 pt-8">
       <div className="bg-white  rounded-lg shadow-md shadow-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/100  transition duration-300 transform hover:scale-105 cursor-pointer">
-        <div className="p-6" onClick={navigateToPdf}>
-          <h2 className="text-lg font-semibold text-black mb-2 line-clamp-1">{title}</h2>
-          <p
-            className="text-sm text-black mb-4 line-clamp-1" // Use line-clamp to limit to 2 lines
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
-          <div className="text-xs text-black mb-1 line-clamp-1">{author}</div>
-          <div className="text-xs text-black mb-1 line-clamp-1">{institution}</div>
-          <a
-            className="text-xs text-cyan-500 hover:underline"
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Check Out
-          </a>
+        <div className="bg-white rounded-lg shadow-md shadow-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/100 transition duration-300 transform hover:scale-105 cursor-pointer">
+          <div className="p-3" onClick={navigateToPdf}>
+            <div className="text-2xl font-semibold mb-1 truncate">{title}</div>
+
+            <p
+              className="text-sm text-black mb-4 line-clamp-1"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
+
+            <div className="text-xs text-[#555] mb-1 line-clamp-1 font-bold">
+              Author: {author}
+            </div>
+            <div className="text-[#555] text-xs font-bold">
+              Institution: {institution}
+            </div>
+
+            <div className="flex flex-row justify-between">
+              <div className="text-black text-xs font-mono font-semibold pt-1 mt-2 mr-2">
+                {new Date(createdAt).toLocaleString()}
+              </div>
+              <div className="bg-[#E8E8E8] text-black text-md rounded-full pl-2 pr-2 pt-1 pb-1 ">
+                {topic}
+              </div>
+            </div>
+
+            {/* <a
+      className="text-xs text-cyan-500 hover:underline"
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Check Out
+    </a> */}
+          </div>
         </div>
+
         <div className="absolute top-0 right-0 mt-2 mr-2">
           <div className="relative inline-block text-black">
             <button onClick={toggleDropdown} className="focus:outline-none">
@@ -158,6 +196,8 @@ const CardList = ({ isAuthenticated }) => {
             institution={card.institutionName}
             link={card.link}
             id={card.id}
+            createdAt={card.createdAt}
+            topic={card.topic}
           />
         ))
       ) : (

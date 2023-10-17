@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client"; // Fixed import
 import { EDIT_PDF_MUTATION, PDF_BY_ID } from "../graphql";
 import Logo from "./Logo";
+import {toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Edit = () => {
   const { id } = useParams();
@@ -54,17 +56,15 @@ const Edit = () => {
       const response = await editPdf({
         variables: pdfData,
       });
-
-      console.log("PDF edited successfully:", response.data.editPdf.pdf);
-      setShowSuccessModal(true);
-      setTimeout(() => {
-        setIsSaving(false);
-        setShowSuccessModal(false);
-        navigate("/");
-      }, 1000);
+      const notify = () => toast('Article edited successfully');
+      notify();
+      navigate('/')
+    
+      console.log("article edited successfully:", response.data.editPdf.pdf);
     } catch (error) {
       console.error("Error editing PDF:", error);
     }
+    
   };
 
   const handleCancel = () => {

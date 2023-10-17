@@ -5,6 +5,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPVOTE_QUERY, DOWNVOTE_QUERY, SEARCH_QUERY } from "../graphql";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Logo from "./Logo";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SearchResult = () => {
   const [loadingTime, setLoadingTime] = useState(null);
@@ -49,15 +51,29 @@ const SearchResult = () => {
   };
 
   const handleUpvote = (id) => {
-    upvotePdf({
-      variables: { id: parseInt(id) },
-    });
+    
+    try {
+      upvotePdf({
+        variables: { id: parseInt(id) },
+      });
+      const notify = ()=> toast('Article upvoted successfully');
+      notify();
+    } catch (error) {
+      console.log("error occured while upvoting article")
+    }
   };
 
   const handleDownvote = (id) => {
-    downvotePdf({
-      variables: { id: parseInt(id) },
-    });
+    try {
+      downvotePdf({
+        variables: { id: parseInt(id) },
+      });
+      const notify = () => toast('Article downvoted successfully');
+      notify();
+
+    } catch (error) {
+      console.log("error occured while downvoting article");
+    }
   };
 
   const navigateToPdf = (id) => {
@@ -99,14 +115,13 @@ const SearchResult = () => {
             </div>
           </div>
 
-            <div className="text-md font-semibold mt-6 text-[#555] text-center">
-              {data && data.searchPdfs
-                ? `${data.searchPdfs.length} Results Found ${
-                    loadingTime ? ` in ${loadingTime.toFixed(2)} ms` : ""
-                  }`
-                : "Loading..."}
-            </div>
-
+          <div className="text-md font-semibold mt-6 text-[#555] text-center">
+            {data && data.searchPdfs
+              ? `${data.searchPdfs.length} results found ${
+                  loadingTime ? ` in ${loadingTime.toFixed(2)} ms` : ""
+                }`
+              : "Loading..."}
+          </div>
 
           {searchResults.map((result, index) => (
             <div

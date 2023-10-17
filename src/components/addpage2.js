@@ -8,6 +8,8 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import Logo from "./Logo";
+import {toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Addpage2 = () => {
   const [authorName, setAuthorName] = useState("");
@@ -57,18 +59,14 @@ const Addpage2 = () => {
       const response = await createPdf({
         variables: data,
       });
+      const notify = () => toast('Article added successfully');
+      notify();
+      navigate('/')
 
-      console.log("PDF added successfully:", response.data.createPdf.pdf);
+      console.log("Article added successfully:", response.data.createPdf.pdf);
 
-      // console.log("Editor content:", editorHtml);S
-      setShowSuccessModal(true);
-      setTimeout(() => {
-        setIsSaving(false);
-        setShowSuccessModal(false);
-        navigate("/");
-      }, 1000);
     } catch (error) {
-      console.error("Error adding PDF:", error);
+      console.error("Error adding Article", error);
     }
   };
 

@@ -10,6 +10,8 @@ import Article from "./components/article";
 import Addpage2 from "./components/addpage2";
 import Edit from "./components/edit";
 import About from "./components/About";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
@@ -20,12 +22,24 @@ const App = () => {
         <Route exact path="/search-results" element={<SearchResult />} />
         <Route exact path="/login" element={<LoginForm />} />
         <Route exact path="/signup" element={<SignupForm />} />
-        <Route path="/article/:id" element={<Article/>} />
-        <Route exact path="/add" element={<Addpage2/>} />
-        <Route path="/edit/:id" element={<Edit/>} />
+        <Route path="/article/:id" element={<Article />} />
+        <Route exact path="/add" element={<Addpage2 />} />
+        <Route path="/edit/:id" element={<Edit />} />
         <Route path="/about" element={<About />} />
         <Route path="/trending" element={<Trending />} />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </BrowserRouter>
   );
 };
