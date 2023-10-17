@@ -5,6 +5,8 @@ import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "../graphql";
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginForm = () => {
   const [username, setusername] = useState("");
@@ -25,6 +27,11 @@ const LoginForm = () => {
         navigate("/");
       } else {
         console.log("Login failed.");
+        if(!data.signin.success)
+        {
+          const notify = () => toast.error("wrong username or password !");
+          notify();
+        }
       }
     } catch (error) {
       console.error("Login error:", error);

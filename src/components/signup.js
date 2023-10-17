@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { REGISTER_MUTATION } from "../graphql";
 import Logo from "./Logo";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignupForm = () => {
   const [firstname, setfirstName] = useState("");
@@ -23,6 +25,11 @@ const SignupForm = () => {
       if (data.signup.success) {
         console.log("Signed up successfully");
         navigate("/login");
+      } else {
+        if (!data.signup.success) {
+          const notify = () => toast.error("username or email may already exist!");
+          notify();
+        }
       }
     } catch (error) {
       console.error("Signup error:", error);
@@ -32,7 +39,7 @@ const SignupForm = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-50">
       <div>
-      <div className="flex justify-center pb-10">
+        <div className="flex justify-center pb-10">
           <Logo />
         </div>
         <div className=" p-8 bg-white border border-solid border-gray-300 w-[400px] rounded-2xl shadow-lg shadow-cyan-500/50">
